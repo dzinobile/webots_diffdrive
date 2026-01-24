@@ -1,0 +1,170 @@
+#VRML_SIM R2025b utf8
+EXTERNPROTO "webots://projects/devices/robotis/protos/RobotisLds01.proto"
+PROTO CustomBot [
+    field SFVec3f translation 0 0 0
+    field SFRotation rotation 0 1 0 0
+    field SFString name "custom_robot"
+    field SFString controller "<generic>"
+    field MFNode extensionSlot [ RobotisLds01 { }]
+
+]
+{
+    Robot {
+        translation IS translation
+        rotation IS rotation
+        name IS name
+        controller IS controller
+    children [
+        HingeJoint {
+        jointParameters HingeJointParameters {
+            position 0
+            axis 1 0 0
+            anchor -0.055 -0.01 0
+        }
+        device [
+            RotationalMotor {
+            name "left wheel motor"
+            }
+        ]
+        endPoint Solid {
+            translation -0.055 -0.01 0
+            children [
+            DEF WHEEL Transform {
+                rotation 1 0 0 1.5707996938995747
+                children [
+                Shape {
+                    appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 1
+                    metalness 0
+                    }
+                    geometry Mesh {
+                        url "meshes/wheel_link.dae"
+                    }
+                }
+                ]
+            }
+            ]
+            name "left wheel"
+            boundingObject Transform {
+                rotation 0 1 0 1.5708
+                translation 0.005 0 0
+                children [
+                    Cylinder {
+                        height 0.01
+                        radius 0.027
+                    }
+                ]
+            }
+            
+
+            physics Physics {
+            }
+        }
+        }
+        HingeJoint {
+        jointParameters HingeJointParameters {
+            position 0
+            axis 1 0 0
+            anchor 0.045 -0.01 0
+        }
+        device [
+            RotationalMotor {
+            name "right wheel motor"
+            }
+        ]
+        endPoint Solid {
+            translation 0.045 -0.01 0
+            children [
+            USE WHEEL
+            ]
+            name "right wheel"
+            boundingObject Transform {
+                translation 0.005 0 0 
+                rotation 0 1 0 1.5708
+                children [
+                    Cylinder {
+                        height 0.01
+                        radius 0.027
+                    }
+                ]
+            }
+            physics Physics {
+            }
+        }
+        }
+        HingeJoint {
+        jointParameters HingeJointParameters {
+            position 0 
+            axis 0 1 0
+            anchor 0 -0.1 -0.05
+        }
+        device [
+            RotationalMotor {
+            name "test motor"
+            }
+        ]
+        endPoint Solid {
+            translation 0 -0.1 -0.05
+            children [
+            DEF AXLE Transform {
+                rotation 1 0 0 1.5708
+                children [
+                Shape {
+                    appearance PBRAppearance {
+                    baseColor 1 0 0
+                    roughness 1
+                    metalness 0
+                    }
+                    geometry Mesh {
+                        url "meshes/axle_link.dae"
+                    }
+                }
+                ]
+            }
+            ]
+            name "front axle"
+            boundingObject Transform {
+                rotation 1 0 0 1.5708
+                children [
+                    Cylinder {
+                        height 0.01
+                        radius 0.0095
+                    }
+                ]
+            }
+            physics Physics {
+            }
+        }
+        }
+        Transform {
+        children [
+            Shape {
+            appearance PBRAppearance {
+                baseColor 0 0 1
+                roughness 1
+                metalness 0
+            }
+            geometry DEF BODY Mesh {
+                url "meshes/base_link.dae"
+            }
+            }
+        ]
+        }
+    ]
+    boundingObject Transform {
+        translation 0 -0.015 0
+        rotation 1 0 0 1.5708
+        children [
+        Cylinder {
+            height 0.060
+            radius 0.075
+        }
+        ]
+    }
+    physics Physics {
+    }
+    }
+
+
+}
