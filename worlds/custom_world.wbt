@@ -22,11 +22,6 @@ CustomBot {
   controller "<extern>"
   name "custom_robot_1"
   rotation 1 0 0 -1.5708
-  extensionSlot [
-    RobotisLds01 {
-      
-    }
-  ]
 }
 
 CustomBot {
