@@ -16,7 +16,6 @@ void MyRobotDriver::init(
 
   right_motor = wb_robot_get_device("right wheel motor");
   left_motor = wb_robot_get_device("left wheel motor");
-  test_motor = wb_robot_get_device("test motor");
 
   wb_motor_set_position(left_motor, INFINITY);
   wb_motor_set_velocity(left_motor, 0.0);
@@ -24,16 +23,9 @@ void MyRobotDriver::init(
   wb_motor_set_position(right_motor, INFINITY);
   wb_motor_set_velocity(right_motor, 0.0);
 
-  wb_motor_set_position(test_motor, INFINITY);
-  wb_motor_set_velocity(test_motor, 0.0);
-
   cmd_vel_subscription_ = node->create_subscription<geometry_msgs::msg::Twist>(
       "/cmd_vel", rclcpp::SensorDataQoS().reliable(),
       std::bind(&MyRobotDriver::cmdVelCallback, this, std::placeholders::_1));
-  test_vel_subscription_ = node->create_subscription<geometry_msgs::msg::Twist>(
-      "/test_vel", rclcpp::SensorDataQoS().reliable(),
-      std::bind(&MyRobotDriver::testVelCallback, this, std::placeholders::_1));
-  
 }
 
 void MyRobotDriver::cmdVelCallback(
@@ -42,17 +34,10 @@ void MyRobotDriver::cmdVelCallback(
   cmd_vel_msg.angular = msg->angular;
 }
 
-void MyRobotDriver::testVelCallback(
-    const geometry_msgs::msg::Twist::SharedPtr msg) {
-  test_vel_msg.linear = msg->linear;
-  test_vel_msg.angular = msg->angular;
-  }
-
 
 void MyRobotDriver::step() {
   auto forward_speed = cmd_vel_msg.linear.x;
   auto angular_speed = cmd_vel_msg.angular.z;
-  auto test_speed = test_vel_msg.angular.z;
 
   auto command_motor_left =
       (forward_speed - angular_speed * HALF_DISTANCE_BETWEEN_WHEELS) /
@@ -60,11 +45,9 @@ void MyRobotDriver::step() {
   auto command_motor_right =
       (forward_speed + angular_speed * HALF_DISTANCE_BETWEEN_WHEELS) /
       WHEEL_RADIUS;
-  auto command_motor_test = test_speed;
 
   wb_motor_set_velocity(left_motor, command_motor_left);
   wb_motor_set_velocity(right_motor, command_motor_right);
-  wb_motor_set_velocity(test_motor, command_motor_test);
 }
 } // namespace my_robot_driver
 

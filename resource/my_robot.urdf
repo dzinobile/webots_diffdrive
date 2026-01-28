@@ -1,12 +1,18 @@
 <?xml version="1.0" ?>
 <robot name="My robot">
     <webots>
-        <device reference="LDS-01" type="Lidar">
+        <device reference="ds0" type="DistanceSensor">
             <ros>
-                <enabled>true</enabled>
-                <updateRate>5</updateRate>
-                <alwaysOn>false</alwaysOn>
-                <frameName>LDS-01</frameName>
+                <topicName>left_sensor</topicName>
+                <alwaysOn>true</alwaysOn>
+                <frameName>left_sensor_frame</frameName>
+            </ros>
+        </device>
+        <device reference="ds1" type="DistanceSensor">
+            <ros>
+                <topicName>right_sensor</topicName>
+                <alwaysOn>true</alwaysOn>
+                <frameName>right_sensor_frame</frameName>
             </ros>
         </device>
         <plugin type="my_robot_driver::MyRobotDriver" />

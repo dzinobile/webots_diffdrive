@@ -20,15 +20,15 @@ CircleArena {
 }
 CustomBot {
   controller "<extern>"
-  name "custom_robot_1"
+  name "robot1"
   rotation 1 0 0 -1.5708
 }
 
 CustomBot {
   controller "<extern>"
-  name "custom_robot_2"
-  rotation 1 0 0 -1.5708
-  translation 0.5 0 0 
+  name "robot2"
+  rotation 0.5 0 0 -1.5708
+  translation 1 0 0 
 }
 
 

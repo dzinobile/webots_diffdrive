@@ -17,18 +17,13 @@ public:
 
 private:
   void cmdVelCallback(const geometry_msgs::msg::Twist::SharedPtr msg);
-  void testVelCallback(const geometry_msgs::msg::Twist::SharedPtr msg);
 
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr
       cmd_vel_subscription_;
-  rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr
-      test_vel_subscription_;
   geometry_msgs::msg::Twist cmd_vel_msg;
-  geometry_msgs::msg::Twist test_vel_msg;
 
   WbDeviceTag right_motor;
   WbDeviceTag left_motor;
-  WbDeviceTag test_motor;
 };
 } // namespace my_robot_driver
 #endif
