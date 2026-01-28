@@ -17,15 +17,15 @@ find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 
 # Export the plugin configuration file
-pluginlib_export_plugin_description_file(webots_ros2_driver my_robot_driver.xml)
-# pluginlib_export_plugin_description_file(webots_ros2_driver custom_robot_driver.xml)
+# pluginlib_export_plugin_description_file(webots_ros2_driver my_robot_driver.xml)
+pluginlib_export_plugin_description_file(webots_ros2_driver custom_robot_driver.xml)
 
 # MyRobotDriver library
 add_library(
   ${PROJECT_NAME}
   SHARED
-  src/MyRobotDriver.cpp
-  # src/CustomRobotDriver.cpp
+  # src/MyRobotDriver.cpp
+  src/CustomRobotDriver.cpp
 )
 
 
@@ -43,15 +43,15 @@ ament_target_dependencies(
 
 
 
-add_executable(sensor_tf_broadcaster src/SensorTfBroadcaster.cpp)
-ament_target_dependencies(
-  sensor_tf_broadcaster
-  rclcpp
-  tf2_ros
-  tf2
-  geometry_msgs
-  sensor_msgs
-)
+# add_executable(sensor_tf_broadcaster src/SensorTfBroadcaster.cpp)
+# ament_target_dependencies(
+#   sensor_tf_broadcaster
+#   rclcpp
+#   tf2_ros
+#   tf2
+#   geometry_msgs
+#   sensor_msgs
+# )
 
 # add_executable(lidar_tf_broadcaster src/LidarTfBroadcaster.cpp)
 # ament_target_dependencies(
@@ -70,9 +70,9 @@ install(TARGETS
   RUNTIME DESTINATION bin
 )
 
-install(TARGETS
-        sensor_tf_broadcaster
-        DESTINATION lib/${PROJECT_NAME})
+# install(TARGETS
+#         sensor_tf_broadcaster
+#         DESTINATION lib/${PROJECT_NAME})
 
 # install(TARGETS
 #         lidar_tf_broadcaster

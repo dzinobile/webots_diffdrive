@@ -1,4 +1,4 @@
-<!-- <?xml version="1.0" ?>
+<?xml version="1.0" ?>
 <robot name="custom_robot">
     <webots>
         <device reference="ld0" type="Lidar">
@@ -16,4 +16,4 @@
         </device>
         <plugin type="my_robot_driver::MyRobotDriver" />
     </webots>
-</robot> -->
+</robot>
