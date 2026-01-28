@@ -10,10 +10,12 @@ from launch_ros.actions import Node
 def generate_launch_description():
     
     package_dir = get_package_share_directory('webots_diffdrive')
-    robot_description_path = os.path.join(package_dir, 'resource', 'custom_robot.urdf')
+    
     webots = WebotsLauncher(
         world=os.path.join(package_dir, 'worlds', 'custom_world.wbt')
     )
+
+
 
     robot_drivers = []
     robot_state_publishers = []
@@ -21,6 +23,10 @@ def generate_launch_description():
     lidar_tf_publishers = []
 
     for i in range (1,3):
+        robot_description_path = os.path.join(package_dir, 'resource', f'robot{i}.urdf')
+        with open(robot_description_path, 'r') as infp:
+            robot_desc = infp.read()
+
         custom_robot_driver = WebotsController(
             robot_name=f'robot{i}',
             parameters=[
@@ -41,7 +47,7 @@ def generate_launch_description():
         #     namespace=f'robot{i}',
         #     output='screen',
         #     parameters=[{
-        #         'robot_description': robot_description_path,
+        #         'robot_description': robot_desc,
         #         'frame_prefix': f'robot{i}/'
         #     }]
         # )
@@ -64,7 +70,7 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             name=f'robot{i}_to_lidar',
-            arguments=['0', '0', '0', '0', '0', '0', f'robot{i}/base_link', 'lidar_frame']
+            arguments=['0', '0', '0', '0', '0', '0', f'robot{i}/base_link', f'robot{i}/lidar_frame']
         )
         lidar_tf_publishers.append(lidar_tf)
 
@@ -73,8 +79,9 @@ def generate_launch_description():
         webots,
         *robot_drivers,
         # *robot_state_publishers,
-        *lidar_tf_publishers,
         *static_tf_publishers,
+        *lidar_tf_publishers,
+
         launch.actions.RegisterEventHandler(
             event_handler=launch.event_handlers.OnProcessExit(
                 target_action=webots,

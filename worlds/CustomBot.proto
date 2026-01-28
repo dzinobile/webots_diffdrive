@@ -200,7 +200,7 @@ PROTO CustomBot [
                     }
                 ]
                 name "ld0"
-            }   
+            } 
         ]
     boundingObject Transform {
         translation 0 -0.015 0

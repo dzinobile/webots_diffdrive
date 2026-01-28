@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
-<robot name="custom_robot">
+<robot name="robot1">
     <webots>
         <device reference="ld0" type="Lidar">
             <ros>
                 <enabled>true</enabled>
                 <updateRate>5</updateRate>
                 <alwaysOn>true</alwaysOn>
-                <frameName>lidar_frame</frameName>
+                <frameName>robot1/lidar_frame</frameName>
             </ros>
         </device>
         <device reference="c0" type="Camera">

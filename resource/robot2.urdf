@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<robot name="robot2">
+    <webots>
+        <device reference="ld0" type="Lidar">
+            <ros>
+                <enabled>true</enabled>
+                <updateRate>5</updateRate>
+                <alwaysOn>true</alwaysOn>
+                <frameName>robot2/lidar_frame</frameName>
+            </ros>
+        </device>
+        <device reference="c0" type="Camera">
+            <ros>
+                <alwaysOn>true</alwaysOn>
+            </ros>
+        </device>
+        <plugin type="my_robot_driver::MyRobotDriver" />
+    </webots>
+    <link name="base_link"/>
+
+    <link name="lidar_frame"/>
+    <joint name="lidar_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="lidar_frame"/>
+        <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    </joint>
+    
+</robot>
