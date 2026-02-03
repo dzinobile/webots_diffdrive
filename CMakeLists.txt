@@ -15,6 +15,7 @@ find_package(pluginlib REQUIRED)
 find_package(webots_ros2_driver REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(nav_msgs REQUIRED)
 
 # Export the plugin configuration file
 # pluginlib_export_plugin_description_file(webots_ros2_driver my_robot_driver.xml)
@@ -39,6 +40,12 @@ ament_target_dependencies(
   pluginlib
   rclcpp
   webots_ros2_driver
+  std_msgs
+  geometry_msgs
+  nav_msgs
+  sensor_msgs
+  tf2_ros
+  tf2
 )
 
 
@@ -82,12 +89,29 @@ install(DIRECTORY
   launch
   resource
   worlds
+  config
   DESTINATION share/${PROJECT_NAME}
 )
+install(DIRECTORY
+  maps
+  DESTINATION share/${PROJECT_NAME}
+  OPTIONAL
+  )
 ament_export_include_directories(
   include
 )
 ament_export_libraries(
   ${PROJECT_NAME}
+)
+ament_export_dependencies(
+  rclcpp
+  std_msgs
+  geometry_msgs
+  nav_msgs
+  sensor_msgs
+  tf2
+  tf2_ros
+  pluginlib
+  webots_ros2_driver
 )
 ament_package()

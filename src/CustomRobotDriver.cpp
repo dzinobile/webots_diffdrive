@@ -7,7 +7,7 @@
 #include <webots/robot.h>
 #include <webots/lidar.h>
 
-#define HALF_DISTANCE_BETWEEN_WHEELS 0.045
+#define HALF_DISTANCE_BETWEEN_WHEELS 0.05
 #define WHEEL_RADIUS 0.025
 
 namespace my_robot_driver {

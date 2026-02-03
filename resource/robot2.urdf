@@ -1,28 +1,64 @@
 <?xml version="1.0" ?>
 <robot name="robot2">
-    <webots>
-        <device reference="ld0" type="Lidar">
-            <ros>
-                <enabled>true</enabled>
-                <updateRate>5</updateRate>
-                <alwaysOn>true</alwaysOn>
-                <frameName>robot2/lidar_frame</frameName>
-            </ros>
-        </device>
-        <device reference="c0" type="Camera">
-            <ros>
-                <alwaysOn>true</alwaysOn>
-            </ros>
-        </device>
-        <plugin type="my_robot_driver::MyRobotDriver" />
-    </webots>
-    <link name="base_link"/>
-
-    <link name="lidar_frame"/>
-    <joint name="lidar_joint" type="fixed">
-        <parent link="base_link"/>
-        <child link="lidar_frame"/>
-        <origin xyz="0 0 0.1" rpy="0 0 0"/>
-    </joint>
+  <webots>
+    <!-- Lidar device -->
+    <device reference="ld0" type="Lidar">
+      <ros>
+        <enabled>true</enabled>
+        <updateRate>10</updateRate>
+        <alwaysOn>true</alwaysOn>
+        <topicName>robot2/scan</topicName>
+        <frameName>robot2/lidar_frame</frameName>
+      </ros>
+    </device>
     
+    <!-- Camera device -->
+    <device reference="c0" type="Camera">
+      <ros>
+        <enabled>true</enabled>
+        <alwaysOn>true</alwaysOn>
+        <topicName>robot2/camera/image_raw</topicName>
+      </ros>
+    </device>
+    
+    <!-- Custom robot driver plugin -->
+    <plugin type="my_robot_driver::MyRobotDriver" />
+    
+    <!-- Differential drive odometry plugin for Nav2 -->
+    <!-- <plugin type="webots_ros2_driver::Ros2DifferentialDrive">
+      <commandTopic>robot2/cmd_vel</commandTopic>
+      <odometryTopic>robot2/odom</odometryTopic>
+      <odometryFrame>robot2/odom</odometryFrame>
+      <robotBaseFrame>robot2/base_link</robotBaseFrame>
+      <wheelRadius>0.027</wheelRadius>
+      <wheelDistance>0.09</wheelDistance>
+      <updateRate>30.0</updateRate>
+    </plugin> -->
+  </webots>
+  
+  <!-- Robot links -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.06" radius="0.075"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.06" radius="0.075"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  <link name="lidar_frame"/>
+  
+  <!-- Joint connecting base_link to lidar_frame -->
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_frame"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+  </joint>
+ <plugin filename="libwebots_ros2_control.so" name="webots_ros2_control">
+        <robotSimType>webots_ros2_control/WebotsSystem</robotSimType>
+ </plugin>
 </robot>
