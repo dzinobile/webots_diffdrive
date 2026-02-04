@@ -39,7 +39,6 @@ TexturedBackground {
   skybox FALSE
 }
 TurtleBot3Burger {
-  name "robot1"
   translation 6.36 0 0
   controller "<extern>"
   controllerArgs [

@@ -7,7 +7,7 @@
         </contributor>
         <created>Tue Jan 20 19:17:15 2026 GMT</created>
         <modified>Tue Jan 20 19:17:15 2026 GMT</modified>
-        <up_axis>Y_UP</up_axis>
+        <up_axis>X_UP</up_axis>
     </asset>
     <library_geometries>
         <geometry id="shape0-lib" name="shape0">
