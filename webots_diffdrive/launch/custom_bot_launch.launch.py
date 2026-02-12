@@ -29,7 +29,6 @@ from launch.actions import IncludeLaunchDescription
 from webots_ros2_driver.webots_launcher import WebotsLauncher
 from webots_ros2_driver.webots_controller import WebotsController
 from webots_ros2_driver.wait_for_controller_connection import WaitForControllerConnection
-from launch_ros.actions import PushRosNamespace
 from launch.actions import GroupAction
 
 def generate_launch_description():
@@ -112,21 +111,21 @@ def generate_launch_description():
         ros2_control_params = os.path.join(package_dir, 'resource', f'custom_bot_{i}_ros2control.yml')
         use_twist_stamped = 'ROS_DISTRO' in os.environ and (os.environ['ROS_DISTRO'] in ['rolling', 'jazzy'])
         if use_twist_stamped:
-            mappings = [('/diffdrive_controller/cmd_vel', f'/robot{i}/cmd_vel'), ('/diffdrive_controller/odom', f'/robot{i}/odom'), ('/tf', f'/robot{i}/tf')]
+            mappings = [(f'/robot{i}/diffdrive_controller/cmd_vel', f'/robot{i}/cmd_vel'), (f'/robot{i}/diffdrive_controller/odom', f'/robot{i}/odom'), ('/tf', f'/robot{i}/tf')]
         else:
-            mappings = [('/diffdrive_controller/cmd_vel_unstamped', f'/robot{i}/cmd_vel'), ('/diffdrive_controller/odom', f'/robot{i}/odom'), ('/tf', f'/robot{i}/tf')]
+            mappings = [(f'/robot{i}/diffdrive_controller/cmd_vel_unstamped', f'/robot{i}/cmd_vel'), (f'/robot{i}/diffdrive_controller/odom', f'/robot{i}/odom'), ('/tf', f'/robot{i}/tf')]
         turtlebot_driver = WebotsController(
-        robot_name=f'robot{i}',
-        namespace=f'robot{i}',
-        parameters=[
-            {'robot_description': robot_description_path,
-             'use_sim_time': use_sim_time,
-             'set_robot_state_publisher': True,
-             'update_rate': 50},
-            ros2_control_params
-        ],
-        remappings=mappings,
-        respawn=True
+            robot_name=f'robot{i}',
+            namespace=f'robot{i}',
+            parameters=[
+                {'robot_description': robot_description_path,
+                'use_sim_time': use_sim_time,
+                'set_robot_state_publisher': True,
+                'update_rate': 50},
+                ros2_control_params
+            ],
+            remappings=mappings,
+            respawn=True
         )
         turtlebot_drivers.append(turtlebot_driver)
 
@@ -137,7 +136,6 @@ def generate_launch_description():
         nav2_params = os.path.join(package_dir, 'resource', f'custom_bot_{i}_nav2_params.yaml')
         if 'turtlebot3_navigation2_custom' in get_packages_with_prefixes():
             turtlebot_navigation = GroupAction([
-                PushRosNamespace(f'robot{i}'),
                 IncludeLaunchDescription(
                     PythonLaunchDescriptionSource(os.path.join(
                         get_package_share_directory('turtlebot3_navigation2_custom'), 'launch', 'navigation2.launch.py')),
@@ -145,7 +143,7 @@ def generate_launch_description():
                         ('map', nav2_map),
                         ('params_file', nav2_params),
                         ('use_sim_time', use_sim_time),
-                        ('robot_number', i)
+                        ('robot_number', str(i))
                     ],
                     condition=launch.conditions.IfCondition(use_nav))
             ])
@@ -154,13 +152,12 @@ def generate_launch_description():
         # SLAM
         if 'turtlebot3_cartographer_custom' in get_packages_with_prefixes():
             turtlebot_slam = GroupAction([
-                PushRosNamespace(f'robot{i}'),
                 IncludeLaunchDescription(
                     PythonLaunchDescriptionSource(os.path.join(
                         get_package_share_directory('turtlebot3_cartographer_custom'), 'launch', 'cartographer.launch.py')),
                     launch_arguments=[
                         ('use_sim_time', use_sim_time),
-                        ('robot_number', i)
+                        ('robot_number', str(i))
                     ],
                     condition=launch.conditions.IfCondition(use_slam))
             ])
