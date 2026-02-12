@@ -28,7 +28,7 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    use_sim_time = LaunchConfiguration('use_sim_time', default='false')
+    use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     use_rviz = LaunchConfiguration('use_rviz', default='true')
     turtlebot3_cartographer_custom_prefix = get_package_share_directory('turtlebot3_cartographer_custom')
     cartographer_config_dir = LaunchConfiguration('cartographer_config_dir', default=os.path.join(
@@ -61,6 +61,8 @@ def generate_launch_description():
             executable='cartographer_node',
             name='cartographer_node',
             # namespace='robot1',
+            remappings=[('/tf', '/robot1/tf'), ('/tf_static', '/robot1/tf_static'),
+                        ('scan', '/robot1/scan')],
             output='screen',
             parameters=[{'use_sim_time': use_sim_time}],
             arguments=['-configuration_directory', cartographer_config_dir,
@@ -79,7 +81,8 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/occupancy_grid.launch.py']),
             launch_arguments={'use_sim_time': use_sim_time, 'resolution': resolution,
-                              'publish_period_sec': publish_period_sec}.items(),
+                              'publish_period_sec': publish_period_sec,
+                              'namespace': 'robot1'}.items(),
         ),
 
         Node(
@@ -89,5 +92,6 @@ def generate_launch_description():
             arguments=['-d', rviz_config_dir],
             parameters=[{'use_sim_time': use_sim_time}],
             condition=IfCondition(use_rviz),
+            remappings=[('/tf', '/robot1/tf'), ('/tf_static', '/robot1/tf_static')],
             output='screen'),
     ])
