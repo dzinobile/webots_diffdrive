@@ -54,6 +54,7 @@ def generate_launch_description():
         parameters=[{
             'robot_description': '<robot name=""><link name=""/></robot>'
         }],
+        remappings=[('/tf', '/robot1/tf'), ('/tf_static', '/robot1/tf_static')],
     )
 
     footprint_publisher = Node(
@@ -62,6 +63,7 @@ def generate_launch_description():
         namespace='robot1',
         output='screen',
         arguments=['0', '0', '0', '0', '0', '0', 'robot1/base_link', 'robot1/base_footprint'],
+        remappings=[('/tf', '/robot1/tf'), ('/tf_static', '/robot1/tf_static')],
     )
 
     lidar_publisher = Node(
@@ -70,6 +72,7 @@ def generate_launch_description():
         namespace='robot1',
         output='screen',
         arguments=['0', '0', '0.19', '0', '0', '0', 'robot1/base_link', 'robot1/LDS-01'],
+        remappings=[('/tf', '/robot1/tf'), ('/tf_static', '/robot1/tf_static')],
     )
 
     # ROS control spawners
@@ -97,9 +100,9 @@ def generate_launch_description():
     ros2_control_params = os.path.join(package_dir, 'resource', 'custom_bot_ros2control.yml')
     use_twist_stamped = 'ROS_DISTRO' in os.environ and (os.environ['ROS_DISTRO'] in ['rolling', 'jazzy'])
     if use_twist_stamped:
-        mappings = [('/diffdrive_controller/cmd_vel', '/robot1/cmd_vel'), ('/diffdrive_controller/odom', '/robot1/odom')]
+        mappings = [('/diffdrive_controller/cmd_vel', '/robot1/cmd_vel'), ('/diffdrive_controller/odom', '/robot1/odom'), ('/tf', '/robot1/tf')]
     else:
-        mappings = [('/diffdrive_controller/cmd_vel_unstamped', '/robot1/cmd_vel'), ('/diffdrive_controller/odom', '/robot1/odom')]
+        mappings = [('/diffdrive_controller/cmd_vel_unstamped', '/robot1/cmd_vel'), ('/diffdrive_controller/odom', '/robot1/odom'), ('/tf', '/robot1/tf')]
     turtlebot_driver = WebotsController(
         robot_name='robot1',
         parameters=[
