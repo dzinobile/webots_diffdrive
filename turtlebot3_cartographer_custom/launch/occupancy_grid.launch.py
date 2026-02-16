@@ -24,7 +24,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
     resolution = LaunchConfiguration('resolution', default='0.05')
     publish_period_sec = LaunchConfiguration('publish_period_sec', default='1.0')
-
+    robot_number = LaunchConfiguration('robot_number', default='1')
     return LaunchDescription([
         DeclareLaunchArgument(
             'resolution',
@@ -41,10 +41,15 @@ def generate_launch_description():
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
 
+        DeclareLaunchArgument(
+            'robot_number',
+            default_value='1',
+            description='robot number'),
         Node(
             package='cartographer_ros',
             executable='cartographer_occupancy_grid_node',
             name='cartographer_occupancy_grid_node',
+            namespace=['robot',robot_number],
             output='screen',
             parameters=[{'use_sim_time': use_sim_time}],
             arguments=['-resolution', resolution, '-publish_period_sec', publish_period_sec]),

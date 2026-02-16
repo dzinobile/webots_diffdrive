@@ -35,7 +35,7 @@ def generate_launch_description():
     cartographer_config_dir = LaunchConfiguration('cartographer_config_dir', default=os.path.join(
                                                   turtlebot3_cartographer_custom_prefix, 'config'))
     configuration_basename = LaunchConfiguration('configuration_basename',
-                                                 default='turtlebot3_lds_2d.lua')
+                                                 default=['turtlebot3_lds_2d_',robot_number,'.lua'])
 
     resolution = LaunchConfiguration('resolution', default='0.05')
     publish_period_sec = LaunchConfiguration('publish_period_sec', default='1.0')
@@ -65,6 +65,7 @@ def generate_launch_description():
             package='cartographer_ros',
             executable='cartographer_node',
             name='cartographer_node',
+            namespace=['robot', robot_number],
             remappings=[
                 ('/tf', ['/robot', robot_number, '/tf']),
                 ('/tf_static', ['/robot', robot_number, '/tf_static']),
@@ -88,7 +89,8 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/occupancy_grid.launch.py']),
             launch_arguments={'use_sim_time': use_sim_time, 'resolution': resolution,
-                              'publish_period_sec': publish_period_sec}.items(),
+                              'publish_period_sec': publish_period_sec,
+                              'robot_number': robot_number,}.items(),
         ),
 
         Node(
