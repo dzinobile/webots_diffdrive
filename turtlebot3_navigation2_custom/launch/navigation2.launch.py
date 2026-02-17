@@ -97,6 +97,7 @@ def generate_launch_description():
             package='rviz2',
             executable='rviz2',
             name='rviz2',
+            namespace=['robot', robot_number],
             arguments=['-d', [rviz_dir + '/tb3_navigation2_', robot_number, '.rviz']],
             parameters=[{'use_sim_time': use_sim_time}],
             remappings=[

@@ -80,7 +80,7 @@ PROTO CustomBot [
             children [
               Cylinder {
                 height 0.01
-                radius 0.027
+                radius 0.025
               }
             ]
           }
@@ -122,7 +122,7 @@ PROTO CustomBot [
             children [
               Cylinder {
                 height 0.01
-                radius 0.027
+                radius 0.025
               }
             ]
           }
@@ -159,7 +159,7 @@ PROTO CustomBot [
     boundingObject Group {
       children [
         Pose {
-          translation 0 0 0.025 
+          translation 0 0 0.0275 
           children [
             Cylinder {
               height 0.060
