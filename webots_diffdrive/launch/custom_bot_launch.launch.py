@@ -51,6 +51,7 @@ def _make_robot_def(i, y_pos):
         f'      name "inertial_unit"\n'
         f'    }}\n'
         f'    RobotisLds01 {{\n'
+        f'      translation 0.03 0.01 -0.08\n'
         f'    }}\n'
         f'  ]\n'
         f'}}'
