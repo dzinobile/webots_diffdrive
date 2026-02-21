@@ -21,37 +21,37 @@ The original `webots_ros2_turtlebot3` package provides a single TurtleBot3 Burge
 webots_multirobot_nav2_slam/
 ├── webots_diffdrive/                   # Core simulation + driver package
 │   ├── launch/
-│   │   ├── custom_bot_launch.launch.py # Main multi-robot launch file
-│   │   └── turtlebot_launch.launch.py  # Reference single TurtleBot3 launch
+│   │   ├── custom_bot_launch.launch.py       # Main multi-robot launch file
+│   │   └── turtlebot_multi_launch.launch.py  # Reference single TurtleBot3 launch
 │   ├── resource/
-│   │   ├── custom_bot.urdf             # CustomBot URDF template (uses ROBOT_NS)
-│   │   ├── custom_bot_ros2control.yml  # ros2_control config template
-│   │   ├── custom_bot_nav2_params.yaml # Nav2 parameter template
-│   │   ├── turtlebot.urdf              # Original TurtleBot3 URDF (reference)
-│   │   ├── turtlebot_ros2control.yml
-│   │   ├── turtlebot_nav2_params.yaml
-│   │   └── turtlebot_example_map.*     # Pre-built map for Nav2
+│   │   ├── custom_bot.urdf                   # CustomBot URDF template (uses ROBOT_NS)
+│   │   ├── custom_bot_ros2control.yml        # ros2_control config template
+│   │   ├── custom_bot_nav2_params.yaml       # Nav2 parameter template
+|   |   ├── turtlebot_multi.urdf              # TurtleBot3Burger URDF template (uses ROBOT_NS)
+│   │   ├── turtlebot_multi_ros2control.yml   # TurtleBot3Burger ros2_control config template
+│   │   ├── turtlebot_multi_nav2_params.yaml  # TurtleBot3Burger nav2 paramter template
+│   │   └── turtlebot_example_map.*           # Pre-built map for Nav2
 │   └── worlds/
-│       ├── custom_world.wbt            # Apartment environment (robot-agnostic)
-│       ├── turtlebot_world.wbt         # Original TurtleBot3 world (reference)
-│       ├── CustomBot.proto             # Custom robot PROTO definition
-│       ├── TurtlebotProto.proto        # Original TurtleBot3 PROTO (reference)
-│       └── meshes/                     # DAE/STL mesh files for CustomBot
+│       ├── custom_world.wbt                  # Apartment environment (custom bot)
+│       ├── turtlebot_multi_wbt               # Apartment environment (turtlebot)
+│       ├── CustomBot.proto                   # Custom robot PROTO definition
+│       ├── TurtlebotProto.proto              # Original TurtleBot3 PROTO 
+│       └── meshes/                           # DAE/STL mesh files for CustomBot
 │
-├── turtlebot3_navigation2_custom/      # Nav2 launch + parameter templates
-│   ├── launch/navigation2.launch.py    # Namespaced Nav2 bringup
+├── turtlebot3_navigation2_custom/            # Nav2 launch + parameter templates
+│   ├── launch/navigation2.launch.py          # Namespaced Nav2 bringup
 │   ├── param/
-│   │   ├── burger.yaml                 # Nav2 param template (ROBOT_NS placeholder)
-│   │   └── humble/burger.yaml          # ROS Humble variant
-│   ├── map/                            # Navigation map (map.pgm + map.yaml)
-│   └── rviz/tb3_navigation2.rviz       # Nav2 RViz config template
+│   │   ├── burger.yaml                       # Nav2 param template (ROBOT_NS placeholder)
+│   │   └── humble/burger.yaml                # ROS Humble variant
+│   ├── map/                                  # Navigation map (map.pgm + map.yaml)
+│   └── rviz/tb3_navigation2.rviz             # Nav2 RViz config template
 │
-└── turtlebot3_cartographer_custom/     # Cartographer SLAM launch + config
+└── turtlebot3_cartographer_custom/          # Cartographer SLAM launch + config
     ├── launch/
-    │   ├── cartographer.launch.py      # Namespaced Cartographer bringup
-    │   └── occupancy_grid.launch.py    # Occupancy grid node
-    ├── config/turtlebot3_lds_2d.lua    # Cartographer 2D SLAM config template
-    └── rviz/tb3_cartographer.rviz      # Cartographer RViz config template
+    │   ├── cartographer.launch.py            # Namespaced Cartographer bringup
+    │   └── occupancy_grid.launch.py          # Occupancy grid node
+    ├── config/turtlebot3_lds_2d.lua          # Cartographer 2D SLAM config template
+    └── rviz/tb3_cartographer.rviz            # Cartographer RViz config template
 ```
 
 ---
@@ -83,7 +83,8 @@ source install/setup.bash
 
 ---
 
-## Robot Model — CustomBot
+## Robot Model
+### CustomBot
 
 `CustomBot` is a custom differential drive robot defined in `worlds/CustomBot.proto`.
 
@@ -99,17 +100,39 @@ source install/setup.bash
 The robot mesh files (`.dae`) live in `worlds/meshes/` and are automatically copied alongside the generated world file at launch time so that Webots can resolve relative PROTO/mesh paths correctly.
 
 ---
+### Turtlebot
+
+`TurtleBot3Burger` is the default turtlebot from the webots_ros2_turtlebot3 package.
+
+| Parameter | Value |
+|---|---|
+| Wheel separation | 160 mm (hub-to-hub) |
+| Wheel radius | 33 mm |
+| Drive motors | 2× RotationalMotor, max 6.67 rad/s (0.2 m/s) |
+| Caster wheels | 2× BallJoint + 4 mm sphere (front) |
+| LiDAR | RobotisLDS-01, 5 Hz, 360° |
+| IMU | Accelerometer + Gyro + InertialUnit, 20 Hz |
+
+---
 
 ## Usage
 
 ### Simulation only (no navigation)
-
+#### Turtlebot
+```bash
+ros2 launch webots_diffdrive turtlebot_multi_launch.launch.py
+```
+#### CustomBot
 ```bash
 ros2 launch webots_diffdrive custom_bot_launch.launch.py 
 ```
 
 ### Multiple robots (simulation only)
-
+#### Turtlebot
+```bash
+ros2 launch webots_diffdrive turtlebot_multi_launch.launch.py num_robots:=3
+```
+#### CustomBot
 ```bash
 ros2 launch webots_diffdrive custom_bot_launch.launch.py num_robots:=3
 ```
@@ -120,15 +143,23 @@ Robots spawn at `x=6.36 m`, separated by `0.5 m` on the Y axis:
 - `robot3` → `y=1.0`
 
 ### Simulation + SLAM (Cartographer)
-
+#### Turtlebot
+```bash
+ros2 launch webots_diffdrive turtlebot_multi_launch.launch.py num_robots:=3 slam:=true
+```
+#### CustomBot
 ```bash
 ros2 launch webots_diffdrive custom_bot_launch.launch.py num_robots:=3 slam:=true
 ```
 
 ### Simulation + Navigation (Nav2 with pre-built map)
-
+#### Turtlebot
 ```bash
-ros2 launch webots_diffdrive custom_bot_launch.launch.py num_robots:=3 nav:=true use_sim_time:=true
+ros2 launch webots_diffdrive turtlebot_multi_launch.launch.py num_robots:=3 nav:=true 
+```
+#### CustomBot
+```bash
+ros2 launch webots_diffdrive custom_bot_launch.launch.py num_robots:=3 nav:=true
 ```
 
 ### All launch arguments
@@ -156,10 +187,6 @@ Each robot `i` gets a fully isolated ROS 2 namespace `/robot{i}` containing:
 All per-robot configuration files (URDF, ros2_control YAML, Nav2 YAML, Lua, RViz) are generated from single template files at launch time by substituting the `ROBOT_NS` placeholder with `robot{i}`. Temporary files are written to `/tmp` and cleaned up by the OS after the session.
 
 ---
-
-## Reference: Original TurtleBot3
-
-The `turtlebot_launch.launch.py` file and associated `turtlebot.urdf` / `turtlebot_world.wbt` files are retained as a working reference for the original `webots_ros2_turtlebot3` behaviour (single robot, unmodified TurtleBot3 Burger).
 
 ---
 
