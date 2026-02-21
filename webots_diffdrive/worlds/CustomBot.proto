@@ -130,154 +130,60 @@ PROTO CustomBot [
           }
         }
       }
-      DEF FRONT_JOINT HingeJoint {
-        jointParameters HingeJointParameters {
-          axis 0 0 1
-          anchor 0.05 0 0.0015
-          dampingConstant 0.5
+      BallJoint {
+        jointParameters BallJointParameters {
+          anchor 0.05 0 0.01
         }
         endPoint Solid {
-          translation 0.05 0 0.0015
-          rotation 0 0 1 1.5708
+          translation 0.05 0 0.01
           children [
-            DEF FRONT_AXLE Pose {
-              children [
-                DEF AXLE Transform {
-                  children [
-                    Shape {
-                      appearance PBRAppearance {
-                        baseColor 0 0 0
-                        roughness 1
-                        metalness 0
-                      }
-                      geometry Mesh {
-                        url "meshes/axle_link.dae"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-            HingeJoint {
-              jointParameters HingeJointParameters {
-                # Rolling axis expressed in the swivel arm's local frame.
-                # The swivel solid is rotated 90 deg around Z, so robot-frame Y (0 1 0)
-                # maps to local-frame X (1 0 0).
-                axis 1 0 0
-                # Wheel centre in local frame: R_inv(90Z) * (robot_offset)
-                # robot_offset = (0.051-0.05, 0, 0.002-0.0015) = (0.001, 0, 0.0005)
-                # local = (0, -0.001, 0.0005)
-                anchor 0 -0.001 0.0005
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.1 0.1 0.1
+                roughness 1
+                metalness 0
               }
-              endPoint Solid {
-                translation 0 -0.001 0.0005
-                children [
-                  DEF FRONT_CASTER Pose {
-                    children [
-                      DEF CASTER Transform {
-                        children [
-                          Shape {
-                            appearance PBRAppearance {
-                              baseColor 0 0 0
-                              roughness 1
-                              metalness 0
-                            }
-                            geometry Mesh {
-                              url "meshes/spinwheel_link.dae"
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-                name "front caster"
-                boundingObject Pose {
-                  rotation 0 1 0 1.5708
-                  children [
-                    Sphere {
-                      radius 0.0075
-                    }
-                  ]
-                }
-                physics Physics {
-                }
+              geometry Sphere {
+                radius 0.015
               }
             }
           ]
-          name "front axle"
-          boundingObject Pose {
-            children [
-              Cylinder {
-                height 0.01
-                radius 0.0095
-              }
-            ]
+          name "front caster ball"
+          boundingObject Sphere {
+            radius 0.015
           }
           physics Physics {
           }
         }
       }
-      DEF BACK_JOINT HingeJoint {
-        jointParameters HingeJointParameters {
-          axis 0 0 1
-          anchor -0.05 0 0.0015
-          dampingConstant 0.5
+      BallJoint {
+        jointParameters BallJointParameters {
+          anchor -0.05 0 0.01
         }
         endPoint Solid {
-          translation -0.05 0 0.0015
-          rotation 0 0 1 1.5708
+          translation -0.05 0 0.01
           children [
-            DEF BACK_AXLE Pose {
-              children [
-                USE AXLE
-              ]
-            }
-            HingeJoint {
-              jointParameters HingeJointParameters {
-                axis 1 0 0
-                # robot_offset = (-0.049-(-0.05), 0, 0.002-0.0015) = (0.001, 0, 0.0005)
-                # same local result: (0, -0.001, 0.0005)
-                anchor 0 -0.001 0.0005
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.1 0.1 0.1
+                roughness 1
+                metalness 0
               }
-              endPoint Solid {
-                translation 0 -0.001 0.0005
-                children [
-                  DEF BACK_CASTER Pose {
-                    children [
-                      USE CASTER
-                    ]
-                  }
-                ]
-                name "back caster"
-                boundingObject Pose {
-                  rotation 0 1 0 1.5708
-                  children [
-                    Sphere {
-                      radius 0.0075
-                    }
-                  ]
-                }
-                physics Physics {
-                }
+              geometry Sphere {
+                radius 0.015
               }
             }
           ]
-          name "back axle"
-          boundingObject Pose {
-            children [
-              Cylinder {
-                height 0.01
-                radius 0.0095
-              }
-            ]
+          name "back caster ball"
+          boundingObject Sphere {
+            radius 0.015
           }
           physics Physics {
           }
         }
       }
       DEF BODY Pose {
-        translation 0 0 0.01
+        translation -0.075 -0.075 -0.004
         rotation 0 0 1 1.5708
         children [
           DEF MOTORS Shape {
