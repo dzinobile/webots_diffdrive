@@ -60,6 +60,7 @@ webots_multirobot_nav2_slam/
 
 | Category | Packages |
 |---|---|
+| ROS2 distro | `Humble` |
 | Simulation | `webots_ros2_driver`, `webots_ros2_control` |
 | Navigation | `navigation2`, `nav2_bringup`, all `nav2_*` sub-packages |
 | SLAM | `cartographer_ros` |
